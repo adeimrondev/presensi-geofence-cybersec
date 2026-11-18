@@ -1,5 +1,19 @@
-.env 
-uploads/ 
-node_modules/ 
-vendor/ 
+# File Konfigurasi Sensitif
+.env
+.env.backup
+
+# Log & Dependency
+node_modules/
+vendor/
 *.log
+
+# Abaikan semua file hasil upload, KECUALI .htaccess & .gitkeep
+uploads/*
+!uploads/.htaccess
+!uploads/.gitkeep
+
+# System & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/.env 

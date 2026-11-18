@@ -1,15 +1,16 @@
 <?php
-// config/database.php - Secure PDO Connection & Session Hardening
+// Sembunyikan error mentah PHP dari layar browser (Keamanan Information Disclosure)
+error_reporting(0);
+ini_set('display_errors', 0);
 
+// Setel zona waktu default ke Waktu Indonesia Barat (WIB)
+date_default_timezone_set('Asia/Jakarta');
+
+// config/database.php - Secure PDO Connection & Session Hardening
 if (session_status() === PHP_SESSION_NONE) {
-    ini_set('session.cookie_httponly', 1); // Anti cookie theft via XSS
-    ini_set('session.use_only_cookies', 1);
-    ini_set('session.cookie_samesite', 'Strict'); // Mitigasi CSRF
-    
-    // Aktifkan cookie secure otomatis jika berjalan di HTTPS
-    if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
-        ini_set('session.cookie_secure', 1);
-    }
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.use_only_cookies', '1');
+    ini_set('session.cookie_path', '/');
     session_start();
 }
 
@@ -42,9 +43,8 @@ try {
     $pdo = new PDO($dsn, $db_user, $db_pass, [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false, // Native Prepared Statement (Anti SQL Injection)
+        PDO::ATTR_EMULATE_PREPARES   => false,
     ]);
 } catch (PDOException $e) {
-    // Jangan dump stacktrace detail ke user agar struktur db tidak bocor
     die("Database connection failed. Please contact administrator.");
 }

@@ -1,11 +1,9 @@
 <?php
-// logout.php - Penghancuran Sesi Aman
+// logout.php
 require_once __DIR__ . '/config/database.php';
 
-// 1. Kosongkan array sesi
 $_SESSION = [];
 
-// 2. Hapus cookie sesi dari browser
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(
@@ -19,9 +17,6 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// 3. Hancurkan data sesi di server
 session_destroy();
-
-// 4. Alihkan kembali ke halaman login
 header("Location: login.php");
 exit;

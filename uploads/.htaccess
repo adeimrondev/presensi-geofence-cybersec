@@ -1,0 +1,39 @@
+# 1. Nonaktifkan mesin eksekusi modul PHP
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+
+# 2. Blokir akses ke ekstensi script & executable (Support Apache 2.2 & 2.4)
+
+<FilesMatch "(?i)\.(php|phtml|php3|php4|php5|php7|php8|phps|cgi|pl|exe|sh|py|jsp|asp|htm|html|shtml)$">
+<IfModule mod_authz_core.c>
+Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+Order Deny,Allow
+Deny from all
+</IfModule>
+</FilesMatch>
+
+# 3. Cegah directory browsing
+
+Options -Indexes -ExecCGI
+
+# 4. Paksa serve hanya file gambar yang valid
+
+<FilesMatch "(?i)\.(jpg|jpeg|png|webp)$">
+<IfModule mod_authz_core.c>
+Require all granted
+</IfModule>
+<IfModule !mod_authz_core.c>
+Order Allow,Deny
+Allow from all
+</IfModule>
+</FilesMatch>
